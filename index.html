@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu Page</title>
+  <!-- Include the Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+  <!-- Include any other dependencies you might need -->
+  <script src="path/to/other/dependencies.js"></script>
+<style>
+  .menu-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menu-image {
+    max-width: 300px;
+    max-height: 200px;
+    margin: auto;
+  }
+</style>
+</head>
+<body>
+  <h1>Menu</h1>
+  <div id="menu"></div>
+
+  <script>
+    // Initialize Firebase
+    var firebaseConfig = {apiKey: "AIzaSyCbHb_MfnMuSJSLQsNc_y2Rh3olX8Qt_B8",
+  authDomain: "new-check-entep.firebaseapp.com",
+  projectId: "new-check-entep",
+  storageBucket: "new-check-entep.appspot.com",
+  messagingSenderId: "825195389121",
+  appId: "1:825195389121:web:15cccdb2421ff0e8057440"
+      // Your Firebase configuration
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Get a reference to the database
+    var database = firebase.database();
+
+    // Fetch menu data from Firebase
+    var menuRef = database.ref('menu');
+    menuRef.on('value', function(snapshot) {
+      var menuData = snapshot.val();
+
+      // Display menu data on the web page
+      var menuContainer = document.getElementById('menu');
+      menuContainer.innerHTML = '';
+
+      for (var key in menuData) {
+        if (menuData.hasOwnProperty(key)) {
+          var menuItem = menuData[key];
+          var menuItemElement = document.createElement('div');
+menuItemElement.innerHTML = `
+   <div class="menu-item-container">
+     <img src="${menuItem.image}" alt="${menuItem.name}" class="menu-image">
+     <h2>${menuItem.name}</h2>
+     <h4>Rs ${menuItem.price}</h4>
+ <p>${menuItem.description}</p>  </div>
+ 
+`;
+          menuContainer.appendChild(menuItemElement);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
